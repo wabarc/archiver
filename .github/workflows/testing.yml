@@ -1,0 +1,29 @@
+name: Testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize, reopened ]
+    paths:
+      - "package.json"
+      - "**/*.ts"
+      - "**/*.js"
+
+jobs:
+  testing:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    name: Testing
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2.1.2
+      with:
+        node-version: '12.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm install
+    - run: npm run test
+    - run: npm run build

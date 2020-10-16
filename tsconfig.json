@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "es6",
+      "dom",
+      "es2020.string"
+    ],
+    "newLine": "lf",
+    "outDir": "dist",
+    "rootDir": "src",
+    "strict": true,
+    "allowJs": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": false,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "sourceMap": true
+  },
+  "files": [
+    "src/index.ts"
+  ],
+  "include": ["src"],
+  "exclude": [
+    "coverage",
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.js"
+  ]
+}
