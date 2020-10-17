@@ -3,13 +3,9 @@ import { telegram } from '../src/telegram';
 
 const channel = 'wabarc_testing';
 
-console.warn = jest.fn((warn) => {
-  console.log(warn);
-});
-// todo
-console.error = jest.fn((error) => {
-  console.log(error);
-});
+// console.error = jest.fn((error) => {
+//   console.log(error);
+// });
 
 it('should process invalid telegram channel', async () => {
   const result = await telegram({ channel: 'this-channel-not-exists', msgid: 1 });

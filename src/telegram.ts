@@ -2,7 +2,7 @@ import axios from 'axios';
 import { extractURI, pageTitle, pageURL } from './utils';
 import { Archived, Types } from './types';
 import { cairn } from '@wabarc/cairn';
-import { JSDOM } from 'jsdom';
+import { JSDOM, VirtualConsole } from 'jsdom';
 
 const archive = async (uri: string): Promise<string> => {
   return await cairn.request({ url: uri }).archive();
@@ -42,6 +42,7 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
     return archived;
   }
 
+  const virtualConsole = new VirtualConsole().on('jsdomError', (e) => console.log('JSDOM', e));
   const compact = async (uris: string[]): Promise<Archived[]> => {
     for (const uri of uris) {
       webpage = await archive(uri);
@@ -50,7 +51,7 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
         continue;
       }
 
-      const doc = new JSDOM(webpage).window.document;
+      const doc = new JSDOM(webpage, { virtualConsole }).window.document;
       archived.push({
         id: msgid,
         url: pageURL(doc),
@@ -87,7 +88,7 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
 
       await new Promise((r) => setTimeout(r, 500));
 
-      doc = new JSDOM(archived[archived.length - 1]['content']).window.document;
+      doc = new JSDOM(archived[archived.length - 1]['content'], { virtualConsole }).window.document;
       const ipfsDir = doc.getElementById('content');
       if (!ipfsDir) {
         break;
