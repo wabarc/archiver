@@ -67,7 +67,7 @@ export const pageURL = (doc: Document): string => {
     }
   }
 
-  return doc.URL;
+  return doc.URL === 'about:blank' ? '' : doc.URL;
 };
 
 export const pageTitle = (doc: Document): string => {

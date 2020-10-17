@@ -54,7 +54,7 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
       const doc = new JSDOM(webpage, { virtualConsole }).window.document;
       archived.push({
         id: msgid,
-        url: pageURL(doc),
+        url: pageURL(doc) || uri,
         title: pageTitle(doc),
         content: webpage,
         success: success,
