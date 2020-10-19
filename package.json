@@ -1,9 +1,9 @@
 {
   "name": "@wabarc/archiver",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Archiving webpages from the Telegram channel",
   "main": "./dist/index.js",
-  "types": "./src/index.d.ts",
+  "types": "./dist/types.d.ts",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",

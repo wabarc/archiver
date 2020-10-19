@@ -78,7 +78,7 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
 
   const ipfsURIs = extractURI(embedHTML, 'ipfs');
   if (ipfsURIs.length > 0) {
-    let doc;
+    let doc, current;
     let counter = 1;
     // Process IPFS directory
     while ((archived = await compact(ipfsURIs))) {
@@ -88,7 +88,13 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
 
       await new Promise((r) => setTimeout(r, 500));
 
-      doc = new JSDOM(archived[archived.length - 1]['content'], { virtualConsole }).window.document;
+      current = archived[archived.length - 1];
+      if (!current || !current['content']) {
+        ++counter;
+        continue;
+      }
+
+      doc = new JSDOM(current['content'], { virtualConsole }).window.document;
       const ipfsDir = doc.getElementById('content');
       if (!ipfsDir) {
         break;
