@@ -1,3 +1,5 @@
+import cheerio from 'cheerio';
+
 export const isValidURL = (uri: string): boolean => {
   if (uri.length < 3) {
     return false;
@@ -57,30 +59,20 @@ export const extractURI = (text: string, scope = 'orig'): string[] => {
   return [...new Set(result)];
 };
 
-export const pageURL = (doc: Document): string => {
-  let url = '';
-  const node = doc.querySelector('head > meta[property="og:url"]');
-  if (node) {
-    url = node.getAttribute('content') || '';
-    if (url.length > 0) {
-      return url;
-    }
+export const pageURL = ($: cheerio.Root): string => {
+  const url = $('head > meta[property="og:url"]').attr('content');
+  if (url && typeof url === 'string') {
+    return url;
   }
 
-  return doc.URL === 'about:blank' ? '' : doc.URL;
+  return '';
 };
 
-export const pageTitle = (doc: Document): string => {
-  let node;
-  let title = '';
-  node = doc.querySelector('head > meta[property="og:title"]');
-  if (node) {
-    title = node.getAttribute('content') || '';
-    if (title.length > 0) {
-      return title;
-    }
+export const pageTitle = ($: cheerio.Root): string => {
+  const title = $('head > meta[property="og:title"]').attr('content');
+  if (title && typeof title === 'string') {
+    return title;
   }
-  node = doc.querySelector('title');
 
-  return node ? node.innerHTML : '';
+  return $('title').text() || '';
 };

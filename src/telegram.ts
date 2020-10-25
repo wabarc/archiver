@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { extractURI, pageTitle, pageURL } from './utils';
 import { Archived, Types } from './types';
-import { cairn } from '@wabarc/cairn';
-import { JSDOM, VirtualConsole } from 'jsdom';
+import { cairn, Archived as R } from '@wabarc/cairn';
+import cheerio from 'cheerio';
 
-const archive = async (uri: string): Promise<string> => {
+const archive = async (uri: string): Promise<R> => {
   return await cairn.request({ url: uri }).archive();
 };
 
@@ -36,27 +36,26 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
   const { msgid } = telegram;
 
   let archived: Archived[] = [];
-  let webpage: string;
+  let arc: R;
 
   if (!msgid || typeof msgid !== 'number' || msgid <= 0) {
     return archived;
   }
 
-  const virtualConsole = new VirtualConsole().on('jsdomError', (e) => console.log('JSDOM', e));
   const compact = async (uris: string[]): Promise<Archived[]> => {
     for (const uri of uris) {
-      webpage = await archive(uri);
-      const success = webpage.length > 0;
-      if (!success) {
+      arc = await archive(uri);
+      const success = arc.status === 200 && arc.url === uri;
+      if (!success || !arc.webpage) {
         continue;
       }
 
-      const doc = new JSDOM(webpage, { virtualConsole }).window.document;
+      const $: cheerio.Root = arc.webpage;
       archived.push({
         id: msgid,
-        url: pageURL(doc) || uri,
-        title: pageTitle(doc),
-        content: webpage,
+        url: pageURL($) || uri,
+        title: pageTitle($),
+        content: $.html(),
         success: success,
       });
     }
@@ -78,7 +77,6 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
 
   const ipfsURIs = extractURI(embedHTML, 'ipfs');
   if (ipfsURIs.length > 0) {
-    let doc, current;
     let counter = 1;
     // Process IPFS directory
     while ((archived = await compact(ipfsURIs))) {
@@ -88,23 +86,22 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
 
       await new Promise((r) => setTimeout(r, 500));
 
-      current = archived[archived.length - 1];
+      const current = archived[archived.length - 1];
       if (!current || !current['content']) {
         ++counter;
         continue;
       }
 
-      doc = new JSDOM(current['content'], { virtualConsole }).window.document;
-      const ipfsDir = doc.getElementById('content');
-      if (!ipfsDir) {
+      const $ = cheerio.load(current['content']);
+      const href = $('table > tbody > tr:nth-child(2) > td:nth-child(3) > a').attr('href');
+      if (!href || typeof href !== 'string' || href.length === 0) {
         break;
       }
-      const node = ipfsDir.getElementsByClassName('ipfs-hash');
-      if (node[1] && node[1].href) {
-        ipfsURIs.shift();
-        ipfsURIs.push(node[1].href);
-        archived.pop();
-      }
+
+      ipfsURIs.shift();
+      ipfsURIs.push(href);
+      archived.pop();
+
       ++counter;
     }
   }
