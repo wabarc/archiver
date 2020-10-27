@@ -692,9 +692,9 @@
     eslint-visitor-keys "^2.0.0"
 
 "@wabarc/cairn@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@wabarc/cairn/-/cairn-2.0.0.tgz#71a7c94b0aff0f4052c7c3eb648174a5361a8c9e"
-  integrity sha512-D6kd+VkQmsKs8LkEs3MPvE4H6MyWHDV++HcIDADyveB/SL18sdAhbBPhEAZjHotC4lZK47mceQHrfGjk/86D/A==
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@wabarc/cairn/-/cairn-2.0.1.tgz#ae029c2fb93cdfab8cf50134b043ae72abae16b9"
+  integrity sha512-N46bEHkLzVMcS+Ch7rRMjbwFYDDYhgtVIlOfx98ILFqR5JsluIIqOHHHqQp5k4xMErwWXT8BeZc5PdTqJ72AHA==
   dependencies:
     axios "^0.21.0"
     cheerio "^1.0.0-rc.3"
