@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { extractURI, pageTitle, pageURL } from './utils';
+import { extractURI, pageTitle, pageMissing } from './utils';
 import { Archived, Types } from './types';
 import { cairn, Archived as R } from '@wabarc/cairn';
 import cheerio from 'cheerio';
@@ -51,9 +51,13 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
       }
 
       const $: cheerio.Root = arc.webpage;
+      if (pageMissing($)) {
+        continue;
+      }
+
       archived.push({
         id: msgid,
-        url: pageURL($) || uri,
+        url: uri,
         title: pageTitle($),
         content: $.html(),
         success: success,

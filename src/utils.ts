@@ -76,3 +76,12 @@ export const pageTitle = ($: cheerio.Root): string => {
 
   return $('title').text() || '';
 };
+
+export const pageMissing = ($: cheerio.Root): boolean => {
+  // mp.weixin.qq.com
+  if ($('.weui-msg__icon-area').html()) {
+    return true;
+  }
+
+  return false;
+};
