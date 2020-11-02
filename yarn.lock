@@ -697,9 +697,9 @@
     eslint-visitor-keys "^2.0.0"
 
 "@wabarc/cairn@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@wabarc/cairn/-/cairn-2.1.1.tgz#28faefb089dd336d06dab1870212ac51c37b7856"
-  integrity sha512-UK/iASF/GgdMD70qYvkemRgAVVPEWfX8zMCa1BG3px3NL3RcqpSC5xlhU3yXmAvSKByA5Vqw53iuqcUvCC/M1g==
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@wabarc/cairn/-/cairn-2.1.2.tgz#71b86a90d6c33bbc022604d2fbb3c6005d50ad64"
+  integrity sha512-24UY24slsEBCSWgJABVAX5gWR14E+ORj8nzeyz2vYAYiAwZcCUmi+DbS4yjcp+MNRb5CJwLcrLKkHonWbW0HCg==
   dependencies:
     axios "^0.21.0"
     chardet "^1.3.0"
