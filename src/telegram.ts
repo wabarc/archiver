@@ -15,9 +15,14 @@ const msgEmbed = async (telegram: Types['telegram']): Promise<string> => {
   }
 
   const url = `https://t.me/${channel}/${msgid}?embed=1`;
-  const response = await axios.get(url);
+  try {
+    const response = await axios.get(url);
 
-  return response.data;
+    return response.data;
+  } catch (err) {
+    console.warn(err.message);
+    return '';
+  }
 };
 
 const successful = (archived: Archived[]): boolean => {
@@ -84,7 +89,7 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
     let counter = 1;
     // Process IPFS directory
     while ((archived = await compact(ipfsURIs))) {
-      if (counter >= 5) {
+      if (counter >= 3) {
         break;
       }
 

@@ -83,5 +83,10 @@ export const pageMissing = ($: cheerio.Root): boolean => {
     return true;
   }
 
+  // douban.com/people/\d+/status/\d+/
+  if ($('#f3s').html()) {
+    return true;
+  }
+
   return false;
 };
