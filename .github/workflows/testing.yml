@@ -8,6 +8,7 @@ on:
     types: [ opened, synchronize, reopened ]
     paths:
       - "package.json"
+      - "yarn.lock"
       - "**/*.ts"
       - "**/*.js"
 
