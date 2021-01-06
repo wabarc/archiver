@@ -9,7 +9,7 @@
     "format": "prettier --write '**/*.ts'",
     "format:check": "prettier --check '**/*.ts'",
     "lint": "eslint ./ --ext .ts",
-    "test": "jest --testTimeout 300000",
+    "test": "jest --no-cache --testTimeout 300000",
     "clean": "rm -rf ./dist",
     "prepub": "npm run clean; npm run format; npm run lint; npm run build"
   },
@@ -29,21 +29,21 @@
   },
   "homepage": "https://github.com/wabarc/archiver#readme",
   "dependencies": {
-    "@wabarc/cairn": "^2.1.1",
-    "axios": "^0.21.0",
-    "cheerio": "^1.0.0-rc.3"
+    "@wabarc/cairn": "^2.1.2",
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.5"
   },
   "devDependencies": {
-    "@types/cheerio": "^0.22.22",
-    "@types/jest": "^26.0.14",
-    "@typescript-eslint/eslint-plugin": "^4.6.0",
-    "@typescript-eslint/parser": "^4.6.0",
-    "eslint": "^7.11.0",
-    "eslint-plugin-jest": "^24.1.0",
-    "jest": "^26.5.3",
-    "prettier": "^2.1.2",
-    "ts-jest": "^26.4.3",
-    "typescript": "^4.0.3",
+    "@types/cheerio": "^0.22.23",
+    "@types/jest": "^26.0.19",
+    "@typescript-eslint/eslint-plugin": "^4.12.0",
+    "@typescript-eslint/parser": "^4.12.0",
+    "eslint": "^7.17.0",
+    "eslint-plugin-jest": "^24.1.3",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.3",
     "typescript-formatter": "^7.2.2"
   },
   "engines": {
