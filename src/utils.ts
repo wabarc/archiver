@@ -32,10 +32,10 @@ export const extractURI = (text: string, scope = 'orig'): string[] => {
   }
 
   const regex = {
-    ia: /(?<=href=['"])https:\/\/web\.archive\.org\/web\/[0-9]+\/.*?(?=['"])/gm,
-    is: /(?<=href=['"])https:\/\/archive\.[a-z]{2,5}\/[0-9a-zA-Z].*?(?=['"])/gm,
-    ipfs: /(?<=href=['"])https:\/\/ipfs.io\/ipfs\/.*?(?=['"])/gm,
-    orig: /href=['"]https:\/\/web\.archive\.org\/[save|web/0-9]+\/(.*?(?=['"]))/gm,
+    ia: /(?<=href=['"])https?:\/\/web\.archive\.org\/web\/[0-9]+\/.*?(?=['"])/gm,
+    is: /(?<=href=['"])https?:\/\/archive\.[a-z]{2,5}\/[0-9a-zA-Z].*?(?=['"])/gm,
+    ipfs: /(?<=href=['\"])https?:\/\/ipfs\.io\/ipfs\/\w+(?=['\"])/gm,
+    orig: /href=['"]https?:\/\/web\.archive\.org\/(?:\*|save|web\/\d+)\/(.+?(?=['"]))/gm,
   };
   const re = regex[scope] || regex['orig'];
   const match = [...text.matchAll(re)];
