@@ -49,7 +49,12 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
 
   const compact = async (uris: string[]): Promise<Archived[]> => {
     for (const uri of uris) {
-      arc = await archive(uri);
+      try {
+        arc = await archive(uri);
+      } catch (e) {
+        console.warn(e.message);
+        continue;
+      }
       const success = arc.status === 200 && arc.url === uri;
       if (!success || !arc.webpage) {
         continue;
@@ -72,7 +77,7 @@ export const telegram = async (telegram: Types['telegram']): Promise<Archived[]>
   };
 
   const embedHTML = await msgEmbed(telegram);
-  for (const slot of ['orig', 'ia', 'is']) {
+  for (const slot of ['orig', 'ia', 'is', 'ph']) {
     const urls = extractURI(embedHTML, slot);
     if (urls.length < 1) {
       continue;

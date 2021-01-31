@@ -1,6 +1,6 @@
 {
   "name": "@wabarc/archiver",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Archiving webpages from the Telegram channel",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
