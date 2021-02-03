@@ -34,6 +34,8 @@ The available instance methods are listed below.
 
 - archiver#telegram({ channel: string, msgid: number })
 - archiver#start()
+- archiver#do()
+- archiver#stage()
 
 ## Request Params
 

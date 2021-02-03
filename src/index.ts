@@ -7,4 +7,5 @@ exports.Archiver = Archiver;
 
 const archiver = new Archiver();
 
+export { Task, Stage } from './types';
 export { Archiver, archiver };

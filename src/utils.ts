@@ -35,7 +35,7 @@ export const extractURI = (text: string, scope = 'orig'): string[] => {
     ia: /(?<=href=['"])https?:\/\/web\.archive\.org\/web\/[0-9]+\/.*?(?=['"])/gm,
     is: /(?<=href=['"])https?:\/\/archive\.[a-z]{2,5}\/[0-9a-zA-Z].*?(?=['"])/gm,
     ph: /(?<=href=['"])https?:\/\/telegra\.ph\/\S+(?=['"])/gm,
-    ipfs: /(?<=href=['"])https?:\/\/ipfs\.io\/ipfs\/\w+(?=['"])/gm,
+    ip: /(?<=href=['"])https?:\/\/ipfs\.io\/ipfs\/\w+(?=['"])/gm,
     orig: /href=['"]https?:\/\/web\.archive\.org\/(?:\*|save\/_embed|save|web\/\d+)\/(.+?(?=['"]))/gm,
   };
   const re = regex[scope] || regex['orig'];
@@ -90,4 +90,53 @@ export const pageMissing = ($: cheerio.Root): boolean => {
   }
 
   return false;
+};
+
+const sanitize = (str: string) => {
+  if (typeof str !== 'string') {
+    return str;
+  }
+
+  str = str.replace(/"<>#%\{\}\|\\\^~\[\]`;\?:@=&/g, '').replace(/:\/\/|\//g, '-');
+
+  return Buffer.from(str).toString('utf8');
+};
+
+export const createFilename = (uri: string, title: string): string => {
+  const extension = 'html';
+  let filename = `unknown.${extension}`;
+  let url: URL;
+
+  if (!uri || typeof uri != 'string' || uri.length === 0) {
+    return filename;
+  }
+
+  if (typeof title === 'string') {
+    title = title.replace(/\n|\r|\r\n/gm, '').trim();
+  }
+
+  try {
+    url = new URL(decodeURI(uri));
+  } catch (_) {
+    return sanitize(`${uri.replace(/\./g, '-')}-${title}.${extension}`);
+  }
+
+  const hostname = url.hostname
+    .replace(/\./g, '-')
+    .replace(/www-/, '')
+    .replace(/^-+|-+$/gm, '');
+
+  if (url.pathname.length < 1) {
+    filename = `${hostname}-${title}`.substring(0, 95);
+    return sanitize(`${filename}.{extension}`);
+  }
+
+  const pathname = url.pathname.replace(/:\/\/|\/|\./g, '-').replace(/^-+|-+$/gm, '');
+  let fullpath = `${hostname}-${pathname}-${title}`.replace(/^-+|-+$/gm, '').substring(0, 95);
+  if (url.search.length > 0) {
+    // Prevent overriding the results of different query
+    fullpath += Buffer.from(url.search).toString('base64').substr(-14, 12);
+  }
+
+  return sanitize(`${fullpath}.${extension}`);
 };
